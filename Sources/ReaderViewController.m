@@ -229,6 +229,7 @@
 
 - (void)showDocumentPage:(NSInteger)page
 {
+
 	if (page != currentPage) // Only if on different page
 	{
 		if ((page < minimumPage) || (page > maximumPage)) return;
@@ -326,7 +327,7 @@
 
 	assert(document != nil); // Must have a valid ReaderDocument
 
-	self.view.backgroundColor = [UIColor grayColor]; // Neutral gray
+	self.view.backgroundColor = [UIColor whiteColor]; // Neutral gray
 
 	UIView *fakeStatusBar = nil; CGRect viewRect = self.view.bounds; // View bounds
 
@@ -384,12 +385,14 @@
 	contentViews = [NSMutableDictionary new]; lastHideTime = [NSDate date];
 
 	minimumPage = 1; maximumPage = [document.pageCount integerValue];
+    
+     [mainToolbar hideToolbar]; [mainPagebar hidePagebar];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-
+    
 	if (CGSizeEqualToSize(lastAppearSize, CGSizeZero) == false)
 	{
 		if (CGSizeEqualToSize(lastAppearSize, self.view.bounds.size) == false)
@@ -603,18 +606,12 @@
 			}
 			else // Nothing active tapped in the target content view
 			{
-				if ([lastHideTime timeIntervalSinceNow] < -0.75) // Delay since hide
-				{
-					if ((mainToolbar.alpha < 1.0f) || (mainPagebar.alpha < 1.0f)) // Hidden
-					{
-						[mainToolbar showToolbar]; [mainPagebar showPagebar]; // Show
-					}
-				}
+
 			}
 
 			return;
 		}
-
+        
 		CGRect nextPageRect = viewRect;
 		nextPageRect.size.width = TAP_AREA_SIZE;
 		nextPageRect.origin.x = (viewRect.size.width - TAP_AREA_SIZE);
@@ -701,8 +698,6 @@
 
 			if (CGRectContainsPoint(areaRect, point) == false) return;
 		}
-
-		[mainToolbar hideToolbar]; [mainPagebar hidePagebar]; // Hide
 
 		lastHideTime = [NSDate date]; // Set last hide time
 	}
