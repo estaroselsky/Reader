@@ -384,9 +384,10 @@
 
 	contentViews = [NSMutableDictionary new]; lastHideTime = [NSDate date];
 
-	minimumPage = 1; maximumPage = [document.pageCount integerValue];
+    minimumPage = 1; maximumPage = [document.pageCount integerValue];
     
-     [mainToolbar hideToolbar]; [mainPagebar hidePagebar];
+    [mainToolbar removeFromSuperview]; [mainPagebar removeFromSuperview];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
