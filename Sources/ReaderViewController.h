@@ -27,7 +27,7 @@
 
 #import "ReaderDocument.h"
 #import "ReaderContentView.h"
-#import "ReaderMainToolbar.m"
+#import "ReaderMainToolbar.h"
 
 @class ReaderViewController;
 
