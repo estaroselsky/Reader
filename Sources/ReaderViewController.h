@@ -42,6 +42,7 @@
 
 @property (nonatomic, weak, readwrite) id <ReaderViewControllerDelegate> delegate;
 @property (strong, nonatomic) ReaderContentView *contentView;
+@property (strong, nonatomic) void (^configurateController)();
 
 - (instancetype)initWithReaderDocument:(ReaderDocument *)object;
 
