@@ -388,7 +388,9 @@
     
     [mainToolbar removeFromSuperview]; [mainPagebar removeFromSuperview];
     
-    self.configurateController();
+    if (self.configurateController) {
+        self.configurateController();
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -736,15 +738,16 @@
 
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar exportButton:(UIButton *)button
 {
-	if (printInteraction != nil) [printInteraction dismissAnimated:YES];
-
-	NSURL *fileURL = document.fileURL; // Document file URL
-
-	documentInteraction = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
-
-	documentInteraction.delegate = self; // UIDocumentInteractionControllerDelegate
-
-	[documentInteraction presentOpenInMenuFromRect:self.contentView.frame inView:self.contentView animated:YES];
+    if (printInteraction != nil) [printInteraction dismissAnimated:YES];
+    
+    NSURL *fileURL = document.fileURL; // Document file URL
+    
+    documentInteraction = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
+    
+    documentInteraction.delegate = self; // UIDocumentInteractionControllerDelegate
+    
+    [documentInteraction presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
+    
 }
 
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar printButton:(UIButton *)button
