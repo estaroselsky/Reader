@@ -744,7 +744,7 @@
 
 	documentInteraction.delegate = self; // UIDocumentInteractionControllerDelegate
 
-	[documentInteraction presentOpenInMenuFromRect:button.bounds inView:button animated:YES];
+	[documentInteraction presentOpenInMenuFromRect:self.contentView.frame inView:self.contentView animated:YES];
 }
 
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar printButton:(UIButton *)button

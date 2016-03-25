@@ -27,6 +27,7 @@
 
 #import "ReaderDocument.h"
 #import "ReaderContentView.h"
+#import "ReaderMainToolbar.m"
 
 @class ReaderViewController;
 
@@ -45,5 +46,6 @@
 @property (strong, nonatomic) void (^configurateController)();
 
 - (instancetype)initWithReaderDocument:(ReaderDocument *)object;
+- (void)tappedInToolbar:(ReaderMainToolbar *)toolbar exportButton:(UIButton *)button;
 
 @end
