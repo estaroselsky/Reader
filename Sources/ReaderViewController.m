@@ -129,11 +129,10 @@
 	CGRect viewRect = CGRectZero; viewRect.size = scrollView.bounds.size;
 
 	viewRect.origin.x = (viewRect.size.width * (page - 1)); viewRect = CGRectInset(viewRect, scrollViewOutset, 0.0f);
-    viewRect.origin.y = - 20.f;
+    viewRect.origin.y = 0;
 	NSURL *fileURL = document.fileURL; NSString *phrase = document.password; NSString *guid = document.guid; // Document properties
 
 	ReaderContentView *contentView = [[ReaderContentView alloc] initWithFrame:viewRect fileURL:fileURL page:page password:phrase]; // ReaderContentView
-    self.contentView = contentView;
 
 	contentView.message = self; [contentViews setObject:contentView forKey:[NSNumber numberWithInteger:page]]; [scrollView addSubview:contentView];
 
@@ -346,7 +345,7 @@
 		}
 	}
 
-	CGRect scrollViewRect = CGRectInset(viewRect, -scrollViewOutset, - 44.0f);
+	CGRect scrollViewRect = CGRectInset(viewRect, -scrollViewOutset, 0.0f);
 	theScrollView = [[UIScrollView alloc] initWithFrame:scrollViewRect]; // All
 	theScrollView.autoresizesSubviews = NO; theScrollView.contentMode = UIViewContentModeRedraw;
 	theScrollView.showsHorizontalScrollIndicator = NO; theScrollView.showsVerticalScrollIndicator = NO;
@@ -745,7 +744,6 @@
     documentInteraction = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
     
     documentInteraction.delegate = self; // UIDocumentInteractionControllerDelegate
-    
     [documentInteraction presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
     
 }

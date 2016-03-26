@@ -56,8 +56,7 @@
 
     
     [navigationController setNavigationBarHidden:YES animated:NO];
-    navigationController.navigationBar.tintColor = [UIColor grayColor];
-	//navigationController.navigationBar.barStyle = UIBarStyleBlack; navigationController.navigationBar.translucent = YES;
+	navigationController.navigationBar.barStyle = UIBarStyleBlack; navigationController.navigationBar.translucent = YES;
 
 	mainWindow.rootViewController = navigationController; // Set the root view controller
 
