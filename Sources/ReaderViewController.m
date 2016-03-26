@@ -346,7 +346,7 @@
 		}
 	}
 
-	CGRect scrollViewRect = CGRectInset(viewRect, -scrollViewOutset, 50.0f);
+	CGRect scrollViewRect = CGRectInset(viewRect, -scrollViewOutset, - 44.0f);
 	theScrollView = [[UIScrollView alloc] initWithFrame:scrollViewRect]; // All
 	theScrollView.autoresizesSubviews = NO; theScrollView.contentMode = UIViewContentModeRedraw;
 	theScrollView.showsHorizontalScrollIndicator = NO; theScrollView.showsVerticalScrollIndicator = NO;
@@ -355,15 +355,15 @@
 	theScrollView.backgroundColor = [UIColor clearColor]; theScrollView.delegate = self;
 	[self.view addSubview:theScrollView];
 
-	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT;
-	mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // ReaderMainToolbar
-	mainToolbar.delegate = self; // ReaderMainToolbarDelegate
+//	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT;
+//	mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // ReaderMainToolbar
+//	mainToolbar.delegate = self; // ReaderMainToolbarDelegate
 	//[self.view addSubview:mainToolbar];
 
-	CGRect pagebarRect = self.view.bounds; pagebarRect.size.height = PAGEBAR_HEIGHT;
-	pagebarRect.origin.y = (self.view.bounds.size.height - pagebarRect.size.height);
-	mainPagebar = [[ReaderMainPagebar alloc] initWithFrame:pagebarRect document:document]; // ReaderMainPagebar
-	mainPagebar.delegate = self; // ReaderMainPagebarDelegate
+//	CGRect pagebarRect = self.view.bounds; pagebarRect.size.height = PAGEBAR_HEIGHT;
+//	pagebarRect.origin.y = (self.view.bounds.size.height - pagebarRect.size.height);
+//	mainPagebar = [[ReaderMainPagebar alloc] initWithFrame:pagebarRect document:document]; // ReaderMainPagebar
+//	mainPagebar.delegate = self; // ReaderMainPagebarDelegate
 	//[self.view addSubview:mainPagebar];
 
 	if (fakeStatusBar != nil) [self.view addSubview:fakeStatusBar]; // Add status bar background view
