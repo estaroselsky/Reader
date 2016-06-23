@@ -86,9 +86,9 @@
 
 - (void)updateContentSize:(UIScrollView *)scrollView
 {
-	CGFloat contentHeight = scrollView.bounds.size.height; // Height
+	CGFloat contentHeight = (scrollView.bounds.size.height * maximumPage); // Height
 
-	CGFloat contentWidth = (scrollView.bounds.size.width * maximumPage);
+	CGFloat contentWidth = (scrollView.bounds.size.width);
 
 	scrollView.contentSize = CGSizeMake(contentWidth, contentHeight);
 }
@@ -104,11 +104,25 @@
 
 			CGRect viewRect = CGRectZero; viewRect.size = scrollView.bounds.size;
 
-			viewRect.origin.x = (viewRect.size.width * (page - 1)); // Update X
+			viewRect.origin.y = (self.view.frame.size.height* (page - 1)); // Update Y
 
 			contentView.frame = CGRectInset(viewRect, scrollViewOutset, 0.0f);
 		}
 	];
+    
+//    [contentViews enumerateKeysAndObjectsUsingBlock: // Enumerate content views
+//     ^(NSNumber *key, ReaderContentView *contentView, BOOL *stop)
+//     {
+//         NSInteger page = [key integerValue]; // Page number value
+//         
+//         CGRect viewRect = CGRectZero; viewRect.size = scrollView.bounds.size;
+//         
+//         viewRect.origin.x = (viewRect.size.width * (page - 1)); // Update X
+//         
+//         contentView.frame = CGRectInset(viewRect, scrollViewOutset, 0.0f);
+//     }
+//     ];
+
 
 	NSInteger page = currentPage; // Update scroll view offset to current page
 
@@ -348,7 +362,7 @@
 	CGRect scrollViewRect = CGRectInset(viewRect, -scrollViewOutset, 0.0f);
 	theScrollView = [[UIScrollView alloc] initWithFrame:scrollViewRect]; // All
 	theScrollView.autoresizesSubviews = NO; theScrollView.contentMode = UIViewContentModeRedraw;
-	theScrollView.showsHorizontalScrollIndicator = NO; theScrollView.showsVerticalScrollIndicator = NO;
+	theScrollView.showsHorizontalScrollIndicator = NO; theScrollView.showsVerticalScrollIndicator = YES;
 	theScrollView.scrollsToTop = NO; theScrollView.delaysContentTouches = NO; theScrollView.pagingEnabled = YES;
 	theScrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 	theScrollView.backgroundColor = [UIColor clearColor]; theScrollView.delegate = self;
