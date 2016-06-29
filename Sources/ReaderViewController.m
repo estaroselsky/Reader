@@ -64,6 +64,8 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
     NSDate *lastHideTime;
     
     BOOL ignoreDidScroll;
+    
+    BOOL needToUpdateViews;
 }
 
 #pragma mark - Constants
@@ -107,22 +109,7 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
          viewRect.origin.y = (self.view.frame.size.height* (page - 1)); // Update Y
          
          contentView.frame = CGRectInset(viewRect, scrollViewOutset, 0.0f);
-     }
-     ];
-    
-    //    [contentViews enumerateKeysAndObjectsUsingBlock: // Enumerate content views
-    //     ^(NSNumber *key, ReaderContentView *contentView, BOOL *stop)
-    //     {
-    //         NSInteger page = [key integerValue]; // Page number value
-    //
-    //         CGRect viewRect = CGRectZero; viewRect.size = scrollView.bounds.size;
-    //
-    //         viewRect.origin.x = (viewRect.size.width * (page - 1)); // Update X
-    //
-    //         contentView.frame = CGRectInset(viewRect, scrollViewOutset, 0.0f);
-    //     }
-    //     ];
-    
+     }];
     
     NSInteger page = currentPage; // Update scroll view offset to current page
     
@@ -162,12 +149,13 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
     
     NSInteger pageB = ((contentOffsetY + viewHeight - 1.0f) / viewHeight); // Pages
     
-    NSInteger pageA = (contentOffsetY / viewHeight); pageB += maximumPage + 2; // Add extra pages
-#warning extra pages???
+    NSInteger pageA = (contentOffsetY / viewHeight);
+    
+    pageB += maximumPage + 2; // Add extra pages
     
     if (pageA < minimumPage) pageA = minimumPage; if (pageB > maximumPage) pageB = maximumPage;
     
-    NSRange pageRange = NSMakeRange(pageA, (pageB - pageA + 1)); // Make page range (A to B)
+    NSRange pageRange = NSMakeRange(pageA, (pageB - pageA + 1)); // Make page range (A to B) //was (pageB - pageA + 1)
     
     NSMutableIndexSet *pageSet = [NSMutableIndexSet indexSetWithIndexesInRange:pageRange];
     
@@ -177,13 +165,13 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
         
         if ([pageSet containsIndex:page] == NO) // Remove content view
         {
-            ReaderContentView *contentView = [contentViews objectForKey:key];
+            //ReaderContentView *contentView = [contentViews objectForKey:key];
             
-            [contentView removeFromSuperview]; [contentViews removeObjectForKey:key];
+            //[contentView removeFromSuperview]; //[contentViews removeObjectForKey:key];
         }
         else // Visible content view - so remove it from page set
         {
-            [pageSet removeIndex:page];
+            //[pageSet removeIndex:page];
         }
     }
     
@@ -195,7 +183,6 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
         
         if (pages == 2) // Handle case of only two content views
         {
-#warning look here
             if ((maximumPage > 2) && ([pageSet lastIndex] == maximumPage)) options = NSEnumerationReverse;
         }
         else if (pages == 3) // Handle three content views - show the middle one first
@@ -206,15 +193,19 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
             
             NSInteger page = [workSet firstIndex]; [pageSet removeIndex:page];
             
-            [self addContentView:scrollView page:page];
+            //[self addContentView:scrollView page:page];
         }
         
-        [pageSet enumerateIndexesWithOptions:options usingBlock: // Enumerate page set
-         ^(NSUInteger page, BOOL *stop)
-         {
-             [self addContentView:scrollView page:page];
-         }
-         ];
+        if (needToUpdateViews) {
+            
+            [pageSet enumerateIndexesWithOptions:options usingBlock: // Enumerate page set
+             ^(NSUInteger page, BOOL *stop)
+             {
+                 [self addContentView:scrollView page:page];
+             }
+             ];
+            needToUpdateViews = NO;
+        }
     }
 }
 
@@ -371,17 +362,6 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
     theScrollView.backgroundColor = [UIColor clearColor]; theScrollView.delegate = self;
     [self.view addSubview:theScrollView];
     
-    //	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT;
-    //	mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // ReaderMainToolbar
-    //	mainToolbar.delegate = self; // ReaderMainToolbarDelegate
-    //[self.view addSubview:mainToolbar];
-    
-    //	CGRect pagebarRect = self.view.bounds; pagebarRect.size.height = PAGEBAR_HEIGHT;
-    //	pagebarRect.origin.y = (self.view.bounds.size.height - pagebarRect.size.height);
-    //	mainPagebar = [[ReaderMainPagebar alloc] initWithFrame:pagebarRect document:document]; // ReaderMainPagebar
-    //	mainPagebar.delegate = self; // ReaderMainPagebarDelegate
-    //[self.view addSubview:mainPagebar];
-    
     if (fakeStatusBar != nil) [self.view addSubview:fakeStatusBar]; // Add status bar background view
     
     UITapGestureRecognizer *singleTapOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -400,14 +380,15 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
     
     contentViews = [NSMutableDictionary new]; lastHideTime = [NSDate date];
     
-#warning -3
-    minimumPage = 1; maximumPage = [document.pageCount integerValue];// - 3;
+    minimumPage = 1; maximumPage = [document.pageCount integerValue];//- 3;
     
     [mainToolbar removeFromSuperview]; [mainPagebar removeFromSuperview];
     
     if (self.configurateController) {
         self.configurateController();
     }
+    
+    needToUpdateViews = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -495,7 +476,7 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
 {
     if (userInterfaceIdiom == UIUserInterfaceIdiomPad) if (printInteraction != nil) [printInteraction dismissAnimated:NO];
     
-    ignoreDidScroll = YES;
+    ignoreDidScroll = YES; //NO??
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
@@ -524,7 +505,9 @@ ReaderMainToolbarDelegate, ReaderMainPagebarDelegate, ReaderContentViewDelegate,
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (ignoreDidScroll == NO) [self layoutContentViews:scrollView];
+    if (ignoreDidScroll == NO) {
+        [self layoutContentViews:scrollView];
+    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
